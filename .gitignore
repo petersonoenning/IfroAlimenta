@@ -363,7 +363,5 @@ MigrationBackup/
 FodyWeavers.xsd
 
 # App settings 
-IfroAlimenta/appsettings.json
-
 /appsettings.json
 /appsettings.Development.json
