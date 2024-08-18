@@ -1,0 +1,44 @@
+﻿@page "/sugestao"
+@using IfroAlimenta.Models
+@using IfroAlimenta.Components.Pages
+@using IfroAlimenta.Controllers
+@inject SugestaoController candidatoController
+@inject NavigationManager navigationManager
+
+<h3>Cadastro de Sugestão</h3>
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <div class="mb-3">
+                <label for="descricao" class="form-label">Descrição:</label>
+                <input @bind="novasugestao.Descricao" type="text" class="form-control" id="descricao">
+            </div>
+        </div>
+        <div class="col">
+            <div class="mb-3">
+                <label for="data" class="form-label">Data:</label>
+                <input @bind="novasugestao.Data" type="date" class="form-control" id="data">
+            </div>
+        </div>
+    </div>
+
+    <button type="button" class="btn btn-success" @onclick="Salvar">Salvar</button>
+    <button type="button" class="btn btn-secondary" @onclick="Cancelar">Cancelar</button>
+</div>
+
+@code {
+    private Sugestao novasugestao = new Sugestao();
+
+    private async Task Salvar()
+    {
+        await SugestaoController.Add(novasugestao);
+        await SugestaoController.Salvar();
+        navigationManager.NavigateTo("/cadastrarSugestao");
+    }
+
+    private void Cancelar()
+    {
+        navigationManager.NavigateTo("/cadastrarSugestao");
+    }
+}
