@@ -14,5 +14,7 @@ namespace IfroAlimenta.Models
 
         [Column("data")]
         public DateTime Data { get; set; }
+
+        public List<Sugestao> Sugestoes { get; set; } //Chama a lista para o controller
     }
 }

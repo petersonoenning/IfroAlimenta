@@ -1,44 +1,40 @@
 ﻿@page "/sugestao"
 @using IfroAlimenta.Models
-@using IfroAlimenta.Components.Pages
 @using IfroAlimenta.Controllers
-@inject SugestaoController candidatoController
+@inject SugestaoController sugestaoController
 @inject NavigationManager navigationManager
 
 <h3>Cadastro de Sugestão</h3>
 
-<div class="container">
-    <div class="row">
-        <div class="col">
-            <div class="mb-3">
-                <label for="descricao" class="form-label">Descrição:</label>
-                <input @bind="novasugestao.Descricao" type="text" class="form-control" id="descricao">
-            </div>
-        </div>
-        <div class="col">
-            <div class="mb-3">
-                <label for="data" class="form-label">Data:</label>
-                <input @bind="novasugestao.Data" type="date" class="form-control" id="data">
-            </div>
-        </div>
+<form method="post" @onsubmit="SalvarSugestao">
+    <div class="form-group">
+        <label for="descricao">Descrição:</label>
+        <input type="text" id="descricao" class="form-control" @bind="sugestao.Descricao" />
     </div>
 
-    <button type="button" class="btn btn-success" @onclick="Salvar">Salvar</button>
-    <button type="button" class="btn btn-secondary" @onclick="Cancelar">Cancelar</button>
-</div>
+    <div class="form-group">
+        <label for="data">Data:</label>
+        <input type="date" id="data" class="form-control" @bind="sugestao.Data" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Salvar</button>
+</form>
 
 @code {
-    private Sugestao novasugestao = new Sugestao();
+    private Sugestao sugestao = new Sugestao();
 
-    private async Task Salvar()
+    private async Task SalvarSugestao()
     {
-        await SugestaoController.Add(novasugestao);
-        await SugestaoController.Salvar();
-        navigationManager.NavigateTo("/cadastrarSugestao");
-    }
-
-    private void Cancelar()
-    {
-        navigationManager.NavigateTo("/cadastrarSugestao");
+        try
+        {
+            // Salva a sugestão usando o controlador
+            await sugestaoController.Add(sugestao);
+            // Redireciona para a mesma página ou outra, conforme necessário
+            navigationManager.NavigateTo("/sugestao");
+        }
+        catch (Exception ex)
+        {
+            // Tratamento de erro (opcional)
+        }
     }
 }
