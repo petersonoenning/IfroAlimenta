@@ -1,4 +1,9 @@
 using IfroAlimenta.Components;
+using IfroAlimenta.Controllers;
+using IfroAlimenta.Contexto;
+using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,8 +19,7 @@ builder.Services.AddScoped<UsuarioController>(); //Implementação
 
 //Conexão com o banco de dados usando MySql
 string mySqlConexao = builder.Configuration.GetConnectionString("BaseConexaoMySql");
-builder.Services.AddDbContextPool<ContextoBD>(options =>
-options.UseMySql(mySqlConexao, ServerVersion.AutoDetect(mySqlConexao)));
+builder.Services.AddDbContextPool<ContextoBD>(options => options.UseMySql(mySqlConexao, ServerVersion.AutoDetect(mySqlConexao)));
 
 var app = builder.Build();
 
