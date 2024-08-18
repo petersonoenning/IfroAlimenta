@@ -1,44 +1,40 @@
-﻿using IfroAlimenta.Contexto;
+﻿using IfroAlimenta.Components.Pages;
+using IfroAlimenta.Contexto;
 using IfroAlimenta.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-namespace IfroAlimenta.Controllers
+
+public class SugestaoController : Controller
 {
-    public class SugestaoController: Controller
+    private readonly ContextoBD _context;
+
+    public SugestaoController(ContextoBD context)
     {
-        private readonly ContextoBD _context;
+        _context = context;
+    }
 
-        public SugestaoController(ContextoBD context)
-        {
-            _context = context;
-        }
+    public async Task<List<Sugestao>> ListaSugestoes()
+    {
+        return await _context.Sugestoes.ToListAsync();
+    }
 
-        public async Task<List<Sugestao>> ListaSugestoes()
-        {
-            var sugestoes = await _context.Sugestoes.Include(x => x.Sugestoes).ToListAsync();
-            return sugestoes;
-        }
+    public async Task<IActionResult> Add(Sugestao sugestao)
+    {
+        _context.Sugestoes.Add(sugestao);
+        await _context.SaveChangesAsync();
+        return Ok();
+    }
 
-        public async Task<ActionResult> Add(Sugestao sugestao)
+    public async Task<IActionResult> Salvar()
+    {
+        try
         {
-            _context.Sugestoes.Add(sugestao);
             await _context.SaveChangesAsync();
-            return Ok(sugestao);
+            return Ok();
         }
-
-        public async Task<ActionResult> Salvar()
+        catch (DbUpdateConcurrencyException)
         {
-            try
-            {
-                await _context.SaveChangesAsync();
-                return Ok();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                return StatusCode(500);
-            }
+            return StatusCode(500);
         }
     }
 }

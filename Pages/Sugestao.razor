@@ -1,0 +1,100 @@
+﻿@page "/sugestao"
+@using IfroAlimenta.Models
+@using IfroAlimenta.Controllers
+@inject SugestaoController SugestaoController
+@inject NavigationManager NavigationManager
+
+<h3>Cadastro de Sugestão</h3>
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <div class="mb-3">
+                <label for="descricao" class="form-label">Descrição:</label>
+                <input @bind="novaSugestao.Descricao" type="text" class="form-control" id="descricao">
+            </div>
+        </div>
+        <div class="col">
+            <div class="mb-3">
+                <label for="data" class="form-label">Data:</label>
+                <input @bind="novaSugestao.Data" type="date" class="form-control" id="data">
+            </div>
+        </div>
+    </div>
+
+    @if (enabledButton)
+    {
+        <button type="button" class="btn btn-warning" @onclick="Cancelar">CANCELAR</button>
+        <button type="button" class="btn btn-success" @onclick="Salvar">SALVAR</button>
+    }
+    else
+    {
+        <div class="alert alert-success" role="alert">
+            Sugestão cadastrada com sucesso!
+        </div>
+        <button type="button" class="btn btn-primary" @onclick="NovoCadastroSugestao">NOVO CADASTRO</button>
+    }
+
+    <h4>Lista de Sugestões</h4>
+    @if (sugestoes != null && sugestoes.Any())
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Descrição</th>
+                    <th>Data</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var sugestao in sugestoes)
+                {
+                    <tr>
+                        <td>@sugestao.Id</td>
+                        <td>@sugestao.Descricao</td>
+                        <td>@sugestao.Data.ToShortDateString()</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>Nenhuma sugestão encontrada.</p>
+    }
+</div>
+
+@code {
+    private Sugestao novaSugestao = new Sugestao();
+    private List<Sugestao> sugestoes = new List<Sugestao>();
+    private bool enabledButton = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CarregarSugestoes();
+    }
+
+    private async Task Salvar()
+    {
+        await SugestaoController.Add(novaSugestao);
+        enabledButton = false;
+        await CarregarSugestoes(); // Atualiza a lista de sugestões
+    }
+
+    private void Cancelar()
+    {
+        NavigationManager.NavigateTo("/sugestao");
+    }
+
+    private void NovoCadastroSugestao()
+    {
+        NavigationManager.NavigateTo("/sugestao", forceLoad: true);
+        novaSugestao = new Sugestao(); // Limpa o formulário
+        enabledButton = true;
+    }
+
+    private async Task CarregarSugestoes()
+    {
+        sugestoes = await SugestaoController.ListaSugestoes();
+    }
+}
