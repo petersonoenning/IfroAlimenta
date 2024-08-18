@@ -36,6 +36,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseAntiforgery();
 
+
+
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 

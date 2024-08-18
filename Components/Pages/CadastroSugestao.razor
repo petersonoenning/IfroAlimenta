@@ -77,6 +77,7 @@
     private async Task Salvar()
     {
         await SugestaoController.Add(novaSugestao);
+        await SugestaoController.Salvar();
         enabledButton = false;
         await CarregarSugestoes(); // Atualiza a lista de sugestões
     }
