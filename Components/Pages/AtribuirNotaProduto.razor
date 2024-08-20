@@ -44,7 +44,7 @@
     // Carrega a lista de produtos quando o componente é inicializado
     protected override async Task OnInitializedAsync()
     {
-        produtos = await ProdutoController.ListaProdutos();
+        produtos = await ProdutoController.ListarProdutos();
     }
 
     // Atualiza a nota do produto

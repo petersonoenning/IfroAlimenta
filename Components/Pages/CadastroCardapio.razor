@@ -1,1 +1,92 @@
-﻿
+﻿@page "/cadastrocardapio"
+@using IfroAlimenta.Models
+@using IfroAlimenta.Controllers
+@inject ProdutoController ProdutoController
+@inject CardapioController CardapioController
+@inject NavigationManager NavigationManager
+
+<h3>Cadastro do Cardápio do Dia</h3>
+
+<div class="container">
+    <div class="mb-3">
+        <label for="dataCardapio" class="form-label">Data do Cardápio:</label>
+        <input type="date" @bind="selectedDate" class="form-control" id="dataCardapio" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Selecione os Produtos:</label>
+        @foreach (var produto in produtos)
+        {
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input" @onchange="e => ToggleProdutoSelection(produto.Id, (bool)e.Value)" />
+                <label class="form-check-label">@produto.Nome</label>
+            </div>
+        }
+    </div>
+
+    <div class="mt-3">
+        @if (enabledButton)
+        {
+            <button type="button" class="btn btn-warning" @onclick="Cancelar">CANCELAR</button>
+            <button type="button" class="btn btn-success" @onclick="AdicionarCardapio">SALVAR</button>
+        }
+        else
+        {
+            <div class="alert alert-success" role="alert">
+                Cardápio cadastrado com sucesso!
+            </div>
+            <button type="button" class="btn btn-primary" @onclick="NovoCadastroCardapio">NOVO CADASTRO</button>
+        }
+    </div>
+</div>
+
+@code {
+    private DateTime selectedDate = DateTime.Now;
+    private List<Produto> produtos = new List<Produto>();
+    private List<int> produtosSelecionados = new List<int>();
+    private bool enabledButton = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        produtos = await ProdutoController.ListarProdutos();
+    }
+
+    private void ToggleProdutoSelection(int produtoId, bool isSelected)
+    {
+        if (isSelected)
+        {
+            if (!produtosSelecionados.Contains(produtoId))
+            {
+                produtosSelecionados.Add(produtoId);
+            }
+        }
+        else
+        {
+            produtosSelecionados.Remove(produtoId);
+        }
+    }
+
+    private async Task AdicionarCardapio()
+    {
+        var cardapio = new Cardapio
+            {
+                Data = selectedDate
+            };
+
+        await CardapioController.AdicionarCardapio(cardapio, produtosSelecionados);
+        enabledButton = false;
+    }
+
+    private void Cancelar()
+    {
+        NavigationManager.NavigateTo("/cadastro-cardapio");
+    }
+
+    private void NovoCadastroCardapio()
+    {
+        NavigationManager.NavigateTo("/cadastro-cardapio", forceLoad: true);
+        selectedDate = DateTime.Now;
+        produtosSelecionados.Clear();
+        enabledButton = true;
+    }
+}

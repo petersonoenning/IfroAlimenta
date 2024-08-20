@@ -151,7 +151,7 @@
 
     private async Task CarregarProdutos()
     {
-        produtos = await ProdutoController.ListaProdutos();
+        produtos = await ProdutoController.ListarProdutos();
     }
 
     private string ObterDescricaoCategoria(byte? categoria)

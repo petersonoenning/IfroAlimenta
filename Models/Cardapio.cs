@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Collections.Generic;
 
 namespace IfroAlimenta.Models
 {
@@ -11,6 +12,6 @@ namespace IfroAlimenta.Models
         [Column("data")]
         public DateTime Data { get; set; }
 
-        public ICollection<Opcao_Cardapio>? Opcoes { get; set; } // Nome atualizado
+        public ICollection<Opcao_Cardapio>? Opcoes { get; set; }
     }
 }
