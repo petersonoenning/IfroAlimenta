@@ -7,9 +7,10 @@ namespace IfroAlimenta.Models
     {
         [Column("id")]
         public int Id { get; set; }
+
         [Column("data")]
         public DateTime Data { get; set; }
 
-        
+        public ICollection<Opcao_Cardapio>? Opcoes { get; set; } // Nome atualizado
     }
 }
