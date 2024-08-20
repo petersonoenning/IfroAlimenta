@@ -27,5 +27,14 @@ namespace IfroAlimenta.Controllers
             }
             return false;
         }
+
+        // Método para obter o ranking dos produtos com base na nota
+        public async Task<List<Produto>> ObterRanking()
+        {
+            return await _context.Produtos
+                .Where(p => p.Nota.HasValue)
+                .OrderByDescending(p => p.Nota)
+                .ToListAsync();
+        }
     }
 }

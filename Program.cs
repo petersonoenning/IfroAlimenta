@@ -45,3 +45,6 @@ app.MapRazorComponents<App>()
 app.Run();
 
 builder.Services.AddHttpClient();
+
+app.MapRazorPages();
+app.MapFallbackToPage("/_Host");

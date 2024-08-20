@@ -30,13 +30,23 @@
         <div class="col">
             <div class="mb-3">
                 <label for="categoria" class="form-label">Categoria:</label>
-                <input @bind="novoProduto.Categoria" type="number" class="form-control" id="categoria">
+                <select @bind="novoProduto.Categoria" class="form-select" id="categoria">
+                    @foreach (var categoria in Categorias)
+                    {
+                        <option value="@categoria.Key">@categoria.Value</option>
+                    }
+                </select>
             </div>
         </div>
         <div class="col">
             <div class="mb-3">
                 <label for="tipo" class="form-label">Tipo:</label>
-                <input @bind="novoProduto.Tipo" type="number" class="form-control" id="tipo">
+                <select @bind="novoProduto.Tipo" class="form-select" id="tipo">
+                    @foreach (var tipo in Tipos)
+                    {
+                        <option value="@tipo.Key">@tipo.Value</option>
+                    }
+                </select>
             </div>
         </div>
         <div class="col">
@@ -83,8 +93,8 @@
                         <td>@produto.Nome</td>
                         <td>@produto.Descricao</td>
                         <td>@produto.Quantidade</td>
-                        <td>@produto.Categoria</td>
-                        <td>@produto.Tipo</td>
+                        <td>@ObterDescricaoCategoria(produto.Categoria)</td>
+                        <td>@ObterDescricaoTipo(produto.Tipo)</td>
                         <td>@produto.Valor</td>
                     </tr>
                 }
@@ -101,6 +111,18 @@
     private Produto novoProduto = new Produto();
     private List<Produto> produtos = new List<Produto>();
     private bool enabledButton = true;
+
+    private Dictionary<byte, string> Categorias = new Dictionary<byte, string>
+    {
+        { 1, "Doce" },
+        { 2, "Salgado" }
+    };
+
+    private Dictionary<byte, string> Tipos = new Dictionary<byte, string>
+    {
+        { 1, "Bebida" },
+        { 2, "Comida" }
+    };
 
     protected override async Task OnInitializedAsync()
     {
@@ -130,5 +152,15 @@
     private async Task CarregarProdutos()
     {
         produtos = await ProdutoController.ListaProdutos();
+    }
+
+    private string ObterDescricaoCategoria(byte? categoria)
+    {
+        return categoria.HasValue && Categorias.ContainsKey(categoria.Value) ? Categorias[categoria.Value] : "Desconhecido";
+    }
+
+    private string ObterDescricaoTipo(byte? tipo)
+    {
+        return tipo.HasValue && Tipos.ContainsKey(tipo.Value) ? Tipos[tipo.Value] : "Desconhecido";
     }
 }
