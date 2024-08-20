@@ -10,6 +10,6 @@ namespace IfroAlimenta.Models
         [Column("data")]
         public DateTime Data { get; set; }
 
-        public List<Produto> Produtos { get; set; } //Chamar a lista para o Controller
+        
     }
 }

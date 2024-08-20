@@ -3,6 +3,8 @@
 @using IfroAlimenta.Controllers
 @inject SugestaoController SugestaoController
 @inject NavigationManager NavigationManager
+@rendermode InteractiveServer
+
 
 <h3>Cadastro de Sugestão</h3>
 
@@ -98,4 +100,6 @@
     {
         sugestoes = await SugestaoController.ListaSugestoes();
     }
+
+ 
 }

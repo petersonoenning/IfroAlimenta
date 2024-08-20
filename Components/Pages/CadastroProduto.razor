@@ -1,0 +1,134 @@
+﻿@page "/produto"
+@using IfroAlimenta.Models
+@using IfroAlimenta.Controllers
+@inject ProdutoController ProdutoController
+@inject NavigationManager NavigationManager
+@rendermode InteractiveServer
+
+<h3>Cadastro de Produto</h3>
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <div class="mb-3">
+                <label for="nome" class="form-label">Nome:</label>
+                <input @bind="novoProduto.Nome" type="text" class="form-control" id="nome">
+            </div>
+        </div>
+        <div class="col">
+            <div class="mb-3">
+                <label for="descricao" class="form-label">Descrição:</label>
+                <input @bind="novoProduto.Descricao" type="text" class="form-control" id="descricao">
+            </div>
+        </div>
+        <div class="col">
+            <div class="mb-3">
+                <label for="quantidade" class="form-label">Quantidade:</label>
+                <input @bind="novoProduto.Quantidade" type="text" class="form-control" id="quantidade">
+            </div>
+        </div>
+        <div class="col">
+            <div class="mb-3">
+                <label for="categoria" class="form-label">Categoria:</label>
+                <input @bind="novoProduto.Categoria" type="number" class="form-control" id="categoria">
+            </div>
+        </div>
+        <div class="col">
+            <div class="mb-3">
+                <label for="tipo" class="form-label">Tipo:</label>
+                <input @bind="novoProduto.Tipo" type="number" class="form-control" id="tipo">
+            </div>
+        </div>
+        <div class="col">
+            <div class="mb-3">
+                <label for="valor" class="form-label">Valor:</label>
+                <input @bind="novoProduto.Valor" type="number" step="0.01" class="form-control" id="valor">
+            </div>
+        </div>
+    </div>
+
+    @if (enabledButton)
+    {
+        <button type="button" class="btn btn-warning" @onclick="Cancelar">CANCELAR</button>
+        <button type="button" class="btn btn-success" @onclick="Salvar">SALVAR</button>
+    }
+    else
+    {
+        <div class="alert alert-success" role="alert">
+            Produto cadastrado com sucesso!
+        </div>
+        <button type="button" class="btn btn-primary" @onclick="NovoCadastroProduto">NOVO CADASTRO</button>
+    }
+
+    <h4>Lista de Produtos</h4>
+    @if (produtos != null && produtos.Any())
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Descrição</th>
+                    <th>Quantidade</th>
+                    <th>Categoria</th>
+                    <th>Tipo</th>
+                    <th>Valor</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var produto in produtos)
+                {
+                    <tr>
+                        <td>@produto.Id</td>
+                        <td>@produto.Nome</td>
+                        <td>@produto.Descricao</td>
+                        <td>@produto.Quantidade</td>
+                        <td>@produto.Categoria</td>
+                        <td>@produto.Tipo</td>
+                        <td>@produto.Valor</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>Nenhum produto encontrado.</p>
+    }
+</div>
+
+@code {
+    private Produto novoProduto = new Produto();
+    private List<Produto> produtos = new List<Produto>();
+    private bool enabledButton = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CarregarProdutos();
+    }
+
+    private async Task Salvar()
+    {
+        await ProdutoController.Add(novoProduto);
+        await ProdutoController.Salvar();
+        enabledButton = false;
+        await CarregarProdutos(); // Atualiza a lista de produtos
+    }
+
+    private void Cancelar()
+    {
+        NavigationManager.NavigateTo("/produto");
+    }
+
+    private void NovoCadastroProduto()
+    {
+        NavigationManager.NavigateTo("/produto", forceLoad: true);
+        novoProduto = new Produto(); // Limpa o formulário
+        enabledButton = true;
+    }
+
+    private async Task CarregarProdutos()
+    {
+        produtos = await ProdutoController.ListaProdutos();
+    }
+}

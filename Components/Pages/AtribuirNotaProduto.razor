@@ -1,0 +1,76 @@
+﻿@page "/atribuirnota"
+@using IfroAlimenta.Models
+@using IfroAlimenta.Controllers
+@inject ProdutoController ProdutoController
+@inject NotaController NotaController
+@inject NavigationManager NavigationManager
+@rendermode InteractiveServer
+
+<h3>Atribuir Nota ao Produto</h3>
+
+<div class="container">
+    <div class="mb-3">
+        <label for="produto" class="form-label">Produto:</label>
+        <select @bind="produtoId" class="form-select" id="produto">
+            <option value="">Selecione um produto</option>
+            @foreach (var produto in produtos)
+            {
+                <option value="@produto.Id">@produto.Nome</option>
+            }
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label for="nota" class="form-label">Nota:</label>
+        <input @bind="nota" type="number" min="1" max="10" class="form-control" id="nota">
+    </div>
+
+    <button type="button" class="btn btn-success" @onclick="AtualizarNotaDoProduto">Salvar Nota</button>
+
+    @if (!string.IsNullOrEmpty(mensagem))
+    {
+        <div class="alert alert-success mt-3" role="alert">
+            @mensagem
+        </div>
+    }
+</div>
+
+@code {
+    private int produtoId; // ID do produto selecionado
+    private byte nota; // Nota a ser atribuída
+    private List<Produto> produtos = new List<Produto>(); // Lista de produtos carregados
+    private string mensagem; // Mensagem de feedback ao usuário
+
+    // Carrega a lista de produtos quando o componente é inicializado
+    protected override async Task OnInitializedAsync()
+    {
+        produtos = await ProdutoController.ListaProdutos();
+    }
+
+    // Atualiza a nota do produto
+    private async Task AtualizarNotaDoProduto()
+    {
+        if (produtoId > 0 && nota > 0)
+        {
+            var sucesso = await NotaController.AtribuirNota(produtoId, nota);
+            if (sucesso)
+            {
+                mensagem = "Nota atribuída com sucesso!";
+                produtoId = 0; // Limpa a seleção de produto
+                nota = 0; // Limpa o campo de nota
+            }
+            else
+            {
+                mensagem = "Erro ao atribuir nota.";
+            }
+        }
+        else if (produtoId == 0)
+        {
+            mensagem = "Selecione um produto para atribuir a nota.";
+        }
+        else if (nota == 0)
+        {
+            mensagem = "A nota deve ser maior que 0.";
+        }
+    }
+}
