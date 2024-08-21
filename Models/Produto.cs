@@ -19,8 +19,6 @@ namespace IfroAlimenta.Models
         public byte? Tipo { get; set; }
         [Column("valor")]
         public decimal? Valor { get; set; }
-        [Column("nota")]
-        public byte? Nota { get; set; }
 
     }
 }
