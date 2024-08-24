@@ -17,6 +17,7 @@ builder.Services.AddScoped<ProdutoController>(); // Implementação
 builder.Services.AddScoped<SugestaoController>(); // Implementação
 builder.Services.AddScoped<NotaController>(); // Implementação
 builder.Services.AddScoped<UsuarioController>(); // Implementação
+builder.Services.AddScoped<AvaliacaoController>(); // Implementação
 
 //Conexão com o banco de dados usando MySql
 string mySqlConexao = builder.Configuration.GetConnectionString("BaseConexaoMySql");

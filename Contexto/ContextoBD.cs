@@ -10,6 +10,7 @@ namespace IfroAlimenta.Contexto
         public DbSet<Cardapio> Cardapios { get; set; }
         public DbSet<Opcao_Cardapio> Opcoes_Cardapios { get; set; }
         public DbSet<Sugestao> Sugestoes { get; set; }
+        public DbSet<Avaliacao> Avaliacoes { get; set; }
 
         public ContextoBD(DbContextOptions<ContextoBD> options) : base(options)
         {

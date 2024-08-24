@@ -1,1 +1,35 @@
-﻿
+﻿@page "/ranking"
+@using IfroAlimenta.Models
+@using IfroAlimenta.Controllers
+@inject AvaliacaoController AvaliacaoController
+
+<h3>Ranking dos Produtos</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Produto</th>
+            <th>Média das Notas</th>
+            <th>Quantidade de Avaliações</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in rankingProdutos)
+        {
+            <tr>
+                <td>@item.Produto.Nome</td>
+                <td>@item.MediaNota.ToString("F2")</td>
+                <td>@item.QuantidadeAvaliacoes</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    private List<(Produto Produto, double MediaNota, int QuantidadeAvaliacoes)> rankingProdutos = new List<(Produto, double, int)>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        rankingProdutos = await AvaliacaoController.RankingNotasProduto();
+    }
+}
