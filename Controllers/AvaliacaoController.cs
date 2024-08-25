@@ -1,10 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using IfroAlimenta.Contexto;
 using IfroAlimenta.Models;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using IfroAlimenta.Contexto;
 
 namespace IfroAlimenta.Controllers
 {
@@ -17,15 +14,14 @@ namespace IfroAlimenta.Controllers
             _context = context;
         }
 
-        public async Task<List<Avaliacao>> ListarAvaliacoes()
+        public async Task<List<Produto>> ListarProdutos()
         {
-            return await _context.Avaliacoes.Include(a => a.Produto).ToListAsync();
+            return await _context.Produtos.ToListAsync();
         }
 
         public async Task Add(Avaliacao avaliacao)
         {
-            _context.Avaliacoes.Add(avaliacao);
-            await _context.SaveChangesAsync();
+            await _context.Avaliacoes.AddAsync(avaliacao);
         }
 
         public async Task Salvar()
@@ -33,27 +29,28 @@ namespace IfroAlimenta.Controllers
             await _context.SaveChangesAsync();
         }
 
-        // Método para obter o ranking dos produtos por média de notas
-        public async Task<List<(Produto Produto, double MediaNota, int QuantidadeAvaliacoes)>> RankingNotasProduto()
+        public async Task<List<Avaliacao>> ListarAvaliacoesPorProduto(int produtoId)
+        {
+            return await _context.Avaliacoes
+                                 .Where(a => a.ProdutoId == produtoId)
+                                 .ToListAsync();
+        }
+
+        public async Task<decimal> CalcularMediaNotas(int produtoId)
+        {
+            var avaliacoes = await ListarAvaliacoesPorProduto(produtoId);
+            if (avaliacoes.Count == 0) return 0;
+            return (decimal)avaliacoes.Average(a => a.Nota);
+        }
+
+        public async Task<List<Produto>> ListarProdutosComMediaNotas()
         {
             var produtos = await _context.Produtos.ToListAsync();
-            var avaliacoes = await _context.Avaliacoes.ToListAsync();
-
-            var ranking = produtos
-                .Select(p => new
-                {
-                    Produto = p,
-                    MediaNota = avaliacoes
-                        .Where(a => a.ProdutoId == p.Id)
-                        .Average(a => a.Nota),
-                    QuantidadeAvaliacoes = avaliacoes.Count(a => a.ProdutoId == p.Id)
-                })
-                .OrderByDescending(r => r.MediaNota)
-                .ToList();
-
-            return ranking
-                .Select(r => (r.Produto, r.MediaNota, r.QuantidadeAvaliacoes))
-                .ToList();
+            foreach (var produto in produtos)
+            {
+                produto.MediaNota = await CalcularMediaNotas(produto.Id);
+            }
+            return produtos.OrderByDescending(p => p.MediaNota).ToList();
         }
     }
 }

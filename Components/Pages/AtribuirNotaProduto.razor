@@ -1,19 +1,20 @@
 ﻿@page "/atribuirnota"
 @using IfroAlimenta.Models
 @using IfroAlimenta.Controllers
-@inject ProdutoController ProdutoController
 @inject AvaliacaoController AvaliacaoController
+@inject ProdutoController ProdutoController
 @inject NavigationManager NavigationManager
 @rendermode InteractiveServer
 
-<h3>Atribuir Nota ao Produto</h3>
+<h3>Avaliação de Produto</h3>
 
 <div class="container">
     <div class="row">
         <div class="col">
             <div class="mb-3">
                 <label for="produto" class="form-label">Produto:</label>
-                <select @bind="avaliacao.ProdutoId" class="form-select" id="produto">
+                <select @bind="novaAvaliacao.ProdutoId" class="form-select" id="produto">
+                    <option value="">Selecione aqui</option> <!-- Opção padrão -->
                     @foreach (var produto in produtos)
                     {
                         <option value="@produto.Id">@produto.Nome</option>
@@ -24,11 +25,12 @@
         <div class="col">
             <div class="mb-3">
                 <label for="nota" class="form-label">Nota:</label>
-                <select @bind="avaliacao.Nota" class="form-select" id="nota">
-                    @for (byte i = 1; i <= 5; i++)
-                    {
-                        <option value="@i">@i</option>
-                    }
+                <select @bind="novaAvaliacao.Nota" class="form-select" id="nota">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
                 </select>
             </div>
         </div>
@@ -44,12 +46,12 @@
         <div class="alert alert-success" role="alert">
             Avaliação cadastrada com sucesso!
         </div>
-        <button type="button" class="btn btn-primary" @onclick="NovoCadastroAvaliacao">NOVO CADASTRO</button>
+        <button type="button" class="btn btn-primary" @onclick="NovaAvaliacao">NOVA AVALIAÇÃO</button>
     }
 </div>
 
 @code {
-    private Avaliacao avaliacao = new Avaliacao { Data = DateTime.Now };
+    private Avaliacao novaAvaliacao = new Avaliacao { Data = DateTime.Now };
     private List<Produto> produtos = new List<Produto>();
     private bool enabledButton = true;
 
@@ -60,7 +62,7 @@
 
     private async Task Salvar()
     {
-        await AvaliacaoController.Add(avaliacao);
+        await AvaliacaoController.Add(novaAvaliacao);
         await AvaliacaoController.Salvar();
         enabledButton = false;
     }
@@ -70,9 +72,10 @@
         NavigationManager.NavigateTo("/atribuirnota");
     }
 
-    private void NovoCadastroAvaliacao()
+    private void NovaAvaliacao()
     {
-        avaliacao = new Avaliacao { Data = DateTime.Now }; // Limpa o formulário
+        NavigationManager.NavigateTo("/atribuirnota", forceLoad: true);
+        novaAvaliacao = new Avaliacao { Data = DateTime.Now };
         enabledButton = true;
     }
 }

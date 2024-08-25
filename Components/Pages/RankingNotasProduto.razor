@@ -2,34 +2,42 @@
 @using IfroAlimenta.Models
 @using IfroAlimenta.Controllers
 @inject AvaliacaoController AvaliacaoController
+@rendermode InteractiveServer
 
-<h3>Ranking dos Produtos</h3>
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>Produto</th>
-            <th>Média das Notas</th>
-            <th>Quantidade de Avaliações</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in rankingProdutos)
-        {
+<h4>Ranking de Produtos</h4>
+@if (produtos != null && produtos.Any())
+{
+    <table class="table">
+        <thead>
             <tr>
-                <td>@item.Produto.Nome</td>
-                <td>@item.MediaNota.ToString("F2")</td>
-                <td>@item.QuantidadeAvaliacoes</td>
+                <th>Posição</th>
+                <th>Produto</th>
+               
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < produtos.Count; i++)
+            {
+                <tr>
+                    <td>@(i + 1)º</td> <!-- Mostra a posição (1º, 2º, 3º, etc.) -->
+                    <td>@produtos[i].Nome</td>
+                    
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>Nenhum produto encontrado.</p>
+}
+
 
 @code {
-    private List<(Produto Produto, double MediaNota, int QuantidadeAvaliacoes)> rankingProdutos = new List<(Produto, double, int)>();
+    private List<Produto> produtos = new List<Produto>();
 
     protected override async Task OnInitializedAsync()
     {
-        rankingProdutos = await AvaliacaoController.RankingNotasProduto();
+        produtos = await AvaliacaoController.ListarProdutosComMediaNotas();
     }
 }

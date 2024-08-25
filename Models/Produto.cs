@@ -20,5 +20,8 @@ namespace IfroAlimenta.Models
         [Column("valor")]
         public decimal? Valor { get; set; }
 
+        [NotMapped]
+        public decimal? MediaNota { get; set; }
+
     }
 }
