@@ -70,41 +70,6 @@
         <button type="button" class="btn btn-primary" @onclick="NovoCadastroProduto">NOVO CADASTRO</button>
     }
 
-    <h4>Lista de Produtos</h4>
-    @if (produtos != null && produtos.Any())
-    {
-        <table class="table">
-            <thead>
-                <tr>
-                   
-                    <th>Nome</th>
-                    <th>Descrição</th>
-                    <th>Quantidade</th>
-                    <th>Categoria</th>
-                    <th>Tipo</th>
-                    <th>Valor</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var produto in produtos)
-                {
-                    <tr>
-                        
-                        <td>@produto.Nome</td>
-                        <td>@produto.Descricao</td>
-                        <td>@produto.Quantidade</td>
-                        <td>@ObterDescricaoCategoria(produto.Categoria)</td>
-                        <td>@ObterDescricaoTipo(produto.Tipo)</td>
-                        <td>@produto.Valor</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    }
-    else
-    {
-        <p>Nenhum produto encontrado.</p>
-    }
 </div>
 
 @code {
@@ -154,13 +119,5 @@
         produtos = await ProdutoController.ListarProdutos();
     }
 
-    private string ObterDescricaoCategoria(byte? categoria)
-    {
-        return categoria.HasValue && Categorias.ContainsKey(categoria.Value) ? Categorias[categoria.Value] : "Desconhecido";
-    }
-
-    private string ObterDescricaoTipo(byte? tipo)
-    {
-        return tipo.HasValue && Tipos.ContainsKey(tipo.Value) ? Tipos[tipo.Value] : "Desconhecido";
-    }
+    
 }

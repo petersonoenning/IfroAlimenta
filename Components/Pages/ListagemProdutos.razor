@@ -1,0 +1,73 @@
+﻿@page "/produtos"
+@using IfroAlimenta.Models
+@using IfroAlimenta.Controllers
+@inject ProdutoController ProdutoController
+@rendermode InteractiveServer
+
+<h3>Lista de Produtos</h3>
+
+<div class="container">
+    @if (produtos != null && produtos.Any())
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Descrição</th>
+                    <th>Quantidade</th>
+                    <th>Categoria</th>
+                    <th>Tipo</th>
+                    <th>Valor</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var produto in produtos)
+                {
+                    <tr>
+                        <td>@produto.Nome</td>
+                        <td>@produto.Descricao</td>
+                        <td>@produto.Quantidade</td>
+                        <td>@ObterDescricaoCategoria(produto.Categoria)</td>
+                        <td>@ObterDescricaoTipo(produto.Tipo)</td>
+                        <td>@(produto.Valor.HasValue ? produto.Valor.Value.ToString("F2") : "0.00")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>Nenhum produto encontrado.</p>
+    }
+</div>
+
+@code {
+    private List<Produto> produtos = new List<Produto>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        produtos = await ProdutoController.ListarProdutos();
+    }
+
+    private string ObterDescricaoCategoria(byte? categoria)
+    {
+        var categorias = new Dictionary<byte, string>
+        {
+            { 1, "Doce" },
+            { 2, "Salgado" }
+        };
+
+        return categoria.HasValue && categorias.ContainsKey(categoria.Value) ? categorias[categoria.Value] : "Desconhecido";
+    }
+
+    private string ObterDescricaoTipo(byte? tipo)
+    {
+        var tipos = new Dictionary<byte, string>
+        {
+            { 1, "Bebida" },
+            { 2, "Comida" }
+        };
+
+        return tipo.HasValue && tipos.ContainsKey(tipo.Value) ? tipos[tipo.Value] : "Desconhecido";
+    }
+}

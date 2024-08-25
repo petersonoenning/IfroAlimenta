@@ -1,0 +1,52 @@
+﻿@page "/sugestoes"
+@using IfroAlimenta.Models
+@using IfroAlimenta.Controllers
+@inject SugestaoController SugestaoController
+@inject NavigationManager NavigationManager
+@rendermode InteractiveServer
+
+<h3>Lista de Sugestões</h3>
+
+<div class="container">
+    <h4>Lista de Sugestões</h4>
+    @if (sugestoes != null && sugestoes.Any())
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Descrição</th>
+                    <th>Data</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var sugestao in sugestoes)
+                {
+                    <tr>
+                        <td>@sugestao.Id</td>
+                        <td>@sugestao.Descricao</td>
+                        <td>@sugestao.Data.ToShortDateString()</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>Nenhuma sugestão encontrada.</p>
+    }
+</div>
+
+@code {
+    private List<Sugestao> sugestoes = new List<Sugestao>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CarregarSugestoes();
+    }
+
+    private async Task CarregarSugestoes()
+    {
+        sugestoes = await SugestaoController.ListaSugestoes();
+    }
+}
