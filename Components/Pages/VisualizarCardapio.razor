@@ -1,0 +1,74 @@
+﻿@page "/visualizaropcoes"
+@using IfroAlimenta.Models
+@using IfroAlimenta.Controllers
+@inject OpcaoCardapioController OpcaoCardapioController
+@inject CardapioController CardapioController
+@inject NavigationManager NavigationManager
+@rendermode InteractiveServer
+
+<h3>Visualizar Opções de Cardápio</h3>
+
+<div class="container">
+    <div class="mb-3">
+        <label for="dataCardapio" class="form-label">Selecione a Data:</label>
+        <input type="date" @bind="selectedDate" class="form-control" id="dataCardapio" />
+    </div>
+
+    <div class="mb-3">
+        <button type="button" class="btn btn-primary" @onclick="BuscarOpcoesCardapio">Buscar</button>
+        <button type="button" class="btn btn-secondary" @onclick="NovaBusca">Nova Busca</button>
+    </div>
+
+    @if (isSearchPerformed)
+    {
+        @if (opcoesCardapio != null && opcoesCardapio.Any())
+        {
+            <h4>Opções de Cardápio para @selectedDate.ToString("dd/MM/yyyy")</h4>
+            <ul>
+                @foreach (var opcao in opcoesCardapio)
+                {
+                    <li>@opcao.Produto?.Nome</li>
+                }
+            </ul>
+        }
+        else
+        {
+            <div class="alert alert-warning" role="alert">
+                Não há opções de cardápio para a data selecionada.
+            </div>
+        }
+    }
+</div>
+
+@code {
+    private DateTime selectedDate = DateTime.Now;
+    private List<Opcao_Cardapio> opcoesCardapio = new List<Opcao_Cardapio>();
+    private bool isSearchPerformed = false;
+
+    private async Task BuscarOpcoesCardapio()
+    {
+        isSearchPerformed = true; // Indica que a busca foi realizada
+
+        // Busca o cardápio correspondente à data selecionada
+        var cardapio = (await CardapioController.ListarCardapios())
+                        .FirstOrDefault(c => c.Data.Date == selectedDate.Date);
+
+        if (cardapio != null)
+        {
+            // Lista as opções de cardápio associadas ao cardápio encontrado
+            opcoesCardapio = (await OpcaoCardapioController.ListaOpcoesCardapio())
+                            .Where(o => o.IdCardapio == cardapio.Id)
+                            .ToList();
+        }
+        else
+        {
+            opcoesCardapio.Clear();
+        }
+    }
+
+    private void NovaBusca()
+    {
+        // Recarrega a página para permitir uma nova busca
+        NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
+    }
+}
