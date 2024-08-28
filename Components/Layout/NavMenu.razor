@@ -1,49 +1,114 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">IfroAlimenta</a>
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IfroAlimenta</title>
+
+    <!-- Inclua o Bootstrap Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet">
+
+    <!-- Outras referências CSS (se houver) -->
+    <style>
+        /* Ajuste o tamanho da logo e centralize-a */
+        .logo {
+            position: relative;
+            width: 150px; /* Ajuste o tamanho conforme necessário */
+            height: 100px;
+            left: -30px;
+        }
+
+        /* Espaçamento entre a logo e o menu */
+        .top-row {
+            margin-bottom: 30px; /* Ajuste o espaçamento conforme necessário */
+        }
+
+        /* Agrupar ícones e opções do menu */
+        .nav-scrollable {
+            padding-top: 20px; /* Adiciona espaçamento no topo do menu */
+        }
+
+        /* Ajuste a posição e tamanho dos ícones no menu */
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 10px 0; /* Adiciona padding para separar os itens do menu */
+        }
+
+            .nav-link .bi.icon-adjust {
+                font-size: 1.5rem; /* Tamanho do ícone */
+                margin-right: 10px; /* Espaçamento entre o ícone e o texto */
+            }
+
+            .nav-link span {
+                line-height: 15px; /* Ajuste a altura da linha para alinhar o texto verticalmente */
+            }
+
+            .nav-link:hover {
+                color: #d4d4d4 !important; /* Cor do texto quando o link for selecionado */
+            }
+    </style>
+</head>
+<body>
+    <div class="top-row ps-3 navbar navbar-dark" style="background-color: #28a745;">
+        <div class="container-fluid d-flex justify-content-center align-items-center">
+            <!-- Ícone acima do texto IfroAlimenta -->
+            <img src="/ifro_alimenta.png" alt="Logo" class="logo">
+        </div>
     </div>
-</div>
 
-<input type="checkbox" title="Navigation menu" class="navbar-toggler" />
+    <input type="checkbox" title="Navigation menu" class="navbar-toggler" />
 
-<div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
-    <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
-            </NavLink>
-        </div>
+    <div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()" style="background-color: #28a745;">
+        <nav class="flex-column">
+            <div class="nav-item px-3">
+                <NavLink class="nav-link d-flex align-items-center" href="" Match="NavLinkMatch.All" style="color: #fff;">
+                    <span class="bi bi-house-door-fill me-2 icon-adjust" aria-hidden="true"></span> Home
+                </NavLink>
+            </div>
 
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="produto">
-                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Produtos
-            </NavLink>
-        </div>
-         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="atribuirnota">
-                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Avalie Aqui! 
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="sugestao">
-                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Sugestões!
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="ranking">
-                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Ranking!
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="produtos">
-                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Lista de Produtos
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="sugestoes">
-                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Lista de Sugestões
-            </NavLink>
-        </div>
-    </nav>
-</div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link d-flex align-items-center" href="produto" style="color: #fff;">
+                    <span class="bi bi-box-seam me-2 icon-adjust" aria-hidden="true"></span> Produtos
+                </NavLink>
+            </div>
 
+            <div class="nav-item px-3">
+                <NavLink class="nav-link d-flex align-items-center" href="atribuirnota" style="color: #fff;">
+                    <span class="bi bi-pencil-square me-2 icon-adjust" aria-hidden="true"></span> Avalie Aqui
+                </NavLink>
+            </div>
+
+            <div class="nav-item px-3">
+                <NavLink class="nav-link d-flex align-items-center" href="sugestao" style="color: #fff;">
+                    <span class="bi bi-lightbulb me-2 icon-adjust" aria-hidden="true"></span> Sugestões
+                </NavLink>
+            </div>
+
+            <div class="nav-item px-3">
+                <NavLink class="nav-link d-flex align-items-center" href="ranking" style="color: #fff;">
+                    <span class="bi bi-trophy me-2 icon-adjust" aria-hidden="true"></span> Ranking
+                </NavLink>
+            </div>
+
+            <div class="nav-item px-3">
+                <NavLink class="nav-link d-flex align-items-center" href="produtos" style="color: #fff;">
+                    <span class="bi bi-list-ul me-2 icon-adjust" aria-hidden="true"></span> Lista de Produtos
+                </NavLink>
+            </div>
+
+            <div class="nav-item px-3">
+                <NavLink class="nav-link d-flex align-items-center" href="sugestoes" style="color: #fff;">
+                    <span class="bi bi-chat-dots me-2 icon-adjust" aria-hidden="true"></span> Lista de Sugestões
+                </NavLink>
+            </div>
+
+            <div class="nav-item px-3">
+                <NavLink class="nav-link d-flex align-items-center" href="cadastrocardapio" style="color: #fff;">
+                    <span class="bi bi-calendar-plus me-2 icon-adjust" aria-hidden="true"></span> Cadastrar Cardápio
+                </NavLink>
+            </div>
+        </nav>
+    </div>
+</body>
+</html>

@@ -4,8 +4,10 @@
 @inject ProdutoController ProdutoController
 @inject CardapioController CardapioController
 @inject NavigationManager NavigationManager
+@rendermode InteractiveServer
 
-<h3>Cadastro do Cardápio do Dia</h3>
+
+<h3>Cadastro do cardápio do dia</h3>
 
 <div class="container">
     <div class="mb-3">
@@ -79,12 +81,12 @@
 
     private void Cancelar()
     {
-        NavigationManager.NavigateTo("/cadastro-cardapio");
+        NavigationManager.NavigateTo("/cadastrocardapio");
     }
 
     private void NovoCadastroCardapio()
     {
-        NavigationManager.NavigateTo("/cadastro-cardapio", forceLoad: true);
+        NavigationManager.NavigateTo("/cadastrocardapio", forceLoad: true);
         selectedDate = DateTime.Now;
         produtosSelecionados.Clear();
         enabledButton = true;
