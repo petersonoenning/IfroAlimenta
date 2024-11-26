@@ -3,31 +3,32 @@
 @using IfroAlimenta.Controllers
 @inject ProdutoController ProdutoController
 @inject NavigationManager NavigationManager
+@inject IWebHostEnvironment env
 @rendermode InteractiveServer
 
-<h3>Cadastro de Produto</h3>
+<h3 class="text-center my-4">Cadastro de Produto</h3>
 
-<div class="container">
-    <div class="row">
-        <div class="col">
+<div class="container my-4 p-4 border rounded shadow-sm bg-light">
+    <div class="row gy-3">
+        <div class="col-md-6">
             <div class="mb-3">
                 <label for="nome" class="form-label">Nome:</label>
                 <input @bind="novoProduto.Nome" type="text" class="form-control" id="nome">
             </div>
         </div>
-        <div class="col">
+        <div class="col-md-6">
             <div class="mb-3">
                 <label for="descricao" class="form-label">Descrição:</label>
                 <input @bind="novoProduto.Descricao" type="text" class="form-control" id="descricao">
             </div>
         </div>
-        <div class="col">
+        <div class="col-md-6">
             <div class="mb-3">
                 <label for="quantidade" class="form-label">Quantidade:</label>
                 <input @bind="novoProduto.Quantidade" type="text" class="form-control" id="quantidade">
             </div>
         </div>
-        <div class="col">
+        <div class="col-md-6">
             <div class="mb-3">
                 <label for="categoria" class="form-label">Categoria:</label>
                 <select @bind="novoProduto.Categoria" class="form-select" id="categoria">
@@ -38,7 +39,7 @@
                 </select>
             </div>
         </div>
-        <div class="col">
+        <div class="col-md-6">
             <div class="mb-3">
                 <label for="tipo" class="form-label">Tipo:</label>
                 <select @bind="novoProduto.Tipo" class="form-select" id="tipo">
@@ -49,33 +50,43 @@
                 </select>
             </div>
         </div>
-        <div class="col">
+        <div class="col-md-6">
             <div class="mb-3">
                 <label for="valor" class="form-label">Valor:</label>
                 <input @bind="novoProduto.Valor" type="number" step="0.01" class="form-control" id="valor">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="mb-3">
+                <label for="Anexo" class="form-label">Anexar imagem do produto:</label>
+                <InputFile type="file" class="form-control" OnChange="CarregarArquivo" />
             </div>
         </div>
     </div>
 
     @if (enabledButton)
     {
-        <button type="button" class="btn btn-warning" @onclick="Cancelar">CANCELAR</button>
-        <button type="button" class="btn btn-success" @onclick="Salvar">SALVAR</button>
+        <div class="d-flex justify-content-end mt-4">
+            <button type="button" class="btn btn-warning me-2" @onclick="Cancelar">CANCELAR</button>
+            <button type="button" class="btn btn-success" @onclick="Salvar">SALVAR</button>
+        </div>
     }
     else
     {
-        <div class="alert alert-success" role="alert">
+        <div class="alert alert-success mt-4" role="alert">
             Produto cadastrado com sucesso!
         </div>
-        <button type="button" class="btn btn-primary" @onclick="NovoCadastroProduto">NOVO CADASTRO</button>
+        <div class="d-flex justify-content-end mt-4">
+            <button type="button" class="btn btn-primary" @onclick="NovoCadastroProduto">NOVO CADASTRO</button>
+        </div>
     }
-
 </div>
 
 @code {
     private Produto novoProduto = new Produto();
     private List<Produto> produtos = new List<Produto>();
     private bool enabledButton = true;
+    IReadOnlyList<IBrowserFile>? arquivoSelecionado = null;
 
     private Dictionary<byte, string> Categorias = new Dictionary<byte, string>
     {
@@ -99,7 +110,7 @@
         await ProdutoController.Add(novoProduto);
         await ProdutoController.Salvar();
         enabledButton = false;
-        await CarregarProdutos(); // Atualiza a lista de produtos
+        await CarregarProdutos();
     }
 
     private void Cancelar()
@@ -110,7 +121,7 @@
     private void NovoCadastroProduto()
     {
         NavigationManager.NavigateTo("/produto", forceLoad: true);
-        novoProduto = new Produto(); // Limpa o formulário
+        novoProduto = new Produto();
         enabledButton = true;
     }
 
@@ -119,5 +130,51 @@
         produtos = await ProdutoController.ListarProdutos();
     }
 
-    
+    private async Task CarregarArquivo(InputFileChangeEventArgs e)
+    {
+        arquivoSelecionado = e.GetMultipleFiles();
+        try
+        {
+            foreach (var file in arquivoSelecionado)
+            {
+                long maxFileSize = 1024 * 1024 * 200; // Limite de 200 MB
+                var extensao = Path.GetExtension(file.Name);
+
+                // Extensões permitidas
+                var extensoesPermitidas = new[] { ".png", ".jpg", ".jpeg", ".jfif", ".webp" };
+                if (!extensoesPermitidas.Contains(extensao.ToLower()))
+                {
+                    throw new InvalidOperationException("Tipo de arquivo não permitido.");
+                }
+
+                Stream stream = file.OpenReadStream(maxFileSize);
+
+                // Caminho para salvar o arquivo
+                var productDirectory = Path.Combine(env.WebRootPath, "Produtos", novoProduto.Nome);
+                if (!Directory.Exists(productDirectory))
+                {
+                    Directory.CreateDirectory(productDirectory);
+                }
+
+                var filePath = Path.Combine(productDirectory, $"{Guid.NewGuid()}{extensao}");
+                var filePathRelative = filePath.Replace(env.WebRootPath, "").Replace("\\", "/");
+
+                // Salva o arquivo no diretório
+                await using FileStream fs = File.Create(filePath);
+                await stream.CopyToAsync(fs);
+
+                // Registra o caminho do arquivo
+                novoProduto.Anexo = filePathRelative;
+
+                Console.WriteLine($"Arquivo salvo em: {filePathRelative}");
+
+                stream.Close();
+                fs.Close();
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Erro ao carregar arquivo: {ex.Message}");
+        }
+    }
 }

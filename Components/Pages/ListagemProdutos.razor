@@ -1,52 +1,92 @@
-﻿@page "/produtos"
+﻿@page "/consultar-produtos"
 @using IfroAlimenta.Models
 @using IfroAlimenta.Controllers
 @inject ProdutoController ProdutoController
+@inject NavigationManager navegacao
 @rendermode InteractiveServer
+@inject IWebHostEnvironment env
 
-<h3>Lista de Produtos</h3>
+<h3>CONSULTA DE PRODUTOS</h3>
 
 <div class="container">
-    @if (produtos != null && produtos.Any())
-    {
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Nome</th>
-                    <th>Descrição</th>
-                    <th>Quantidade</th>
-                    <th>Categoria</th>
-                    <th>Tipo</th>
-                    <th>Valor</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var produto in produtos)
+    <nav class="navbar navbar-light" style="background-color: white"></nav>
+    <nav class="navbar navbar-light" style="background-color: darkgreen"></nav>
+
+    <label for="produto" class="form-label">PRODUTOS CADASTRADOS:</label>
+    <select @onchange="SelecionarProduto" class="form-select" aria-label="Selecione um produto">
+        <option selected>Selecione um produto</option>
+        @foreach (var item in listaProdutos)
+        {
+            <option value="@item.Id">@item.Nome</option>
+        }
+    </select>
+
+    <nav class="navbar navbar-light" style="background-color: white"></nav>
+    <nav class="navbar navbar-light" style="background-color: darkgreen"></nav>
+
+    <div class="row align-items-start">
+        <!-- Informações do produto (lado esquerdo) -->
+        <div class="col-md-8">
+            <div class="mb-3">
+                <label for="nome" class="form-label">NOME:</label>
+                <input @bind="produto.Nome" type="text" class="form-control" id="nome" disabled />
+            </div>
+            <div class="mb-3">
+                <label for="descricao" class="form-label">DESCRIÇÃO:</label>
+                <input @bind="produto.Descricao" type="text" class="form-control" id="descricao" disabled />
+            </div>
+            <div class="mb-3">
+                <label for="quantidade" class="form-label">QUANTIDADE:</label>
+                <input @bind="produto.Quantidade" type="text" class="form-control" id="quantidade" disabled />
+            </div>
+            <div class="mb-3">
+                <label for="categoria" class="form-label">CATEGORIA:</label>
+                <input value="@ObterDescricaoCategoria(produto.Categoria)" type="text" class="form-control" id="categoria" disabled />
+            </div>
+            <div class="mb-3">
+                <label for="tipo" class="form-label">TIPO:</label>
+                <input value="@ObterDescricaoTipo(produto.Tipo)" type="text" class="form-control" id="tipo" disabled />
+            </div>
+            <div class="mb-3">
+                <label for="valor" class="form-label">VALOR:</label>
+                <input @bind="produto.Valor" type="text" class="form-control" id="valor" disabled />
+            </div>
+        </div>
+
+        <!-- Foto do produto (lado direito) -->
+        <div class="col-md-4">
+            <label for="anexo" class="form-label">IMAGEM:</label>
+            <div class="mb-3">
+                @if (!string.IsNullOrEmpty(produto.Anexo)) // Verifica se o caminho da foto está disponível
                 {
-                    <tr>
-                        <td>@produto.Nome</td>
-                        <td>@produto.Descricao</td>
-                        <td>@produto.Quantidade</td>
-                        <td>@ObterDescricaoCategoria(produto.Categoria)</td>
-                        <td>@ObterDescricaoTipo(produto.Tipo)</td>
-                        <td>@(produto.Valor.HasValue ? produto.Valor.Value.ToString("F2") : "0.00")</td>
-                    </tr>
+                    <img src="@produto.Anexo" alt="Imagem do Produto" class="img-fluid" style="max-width: 300px; max-height: 300px; margin-top: 50px;" />
                 }
-            </tbody>
-        </table>
-    }
-    else
-    {
-        <p>Nenhum produto encontrado.</p>
-    }
+                else
+                {
+                    <p>Imagem não disponível</p>
+                }
+            </div>
+        </div>
+    </div>
+
+    <nav class="navbar navbar-light" style="background-color: white"></nav>
+    <nav class="navbar navbar-light" style="background-color: darkgreen"></nav>
 </div>
 
 @code {
-    private List<Produto> produtos = new List<Produto>();
+    public List<Produto> listaProdutos = new List<Produto>();
+    public Produto? produto = new Produto();
 
     protected override async Task OnInitializedAsync()
     {
-        produtos = await ProdutoController.ListarProdutos();
+        var lista = await ProdutoController.ListarProdutos();
+        listaProdutos = lista.ToList();
+    }
+
+    public void SelecionarProduto(ChangeEventArgs e)
+    {
+        int id = Convert.ToInt32(e.Value);
+        produto = listaProdutos.FirstOrDefault(p => p.Id == id);
     }
 
     private string ObterDescricaoCategoria(byte? categoria)
