@@ -6,14 +6,14 @@
 @inject NavigationManager NavigationManager
 @rendermode InteractiveServer
 
-<h3>Avaliação de Produto</h3>
+<h3 class="text-center mb-4 fw-bold text-uppercase" style="font-size: 1.8rem; color: #333;">Avaliação de Produto</h3>
 
 <div class="container">
-    <div class="row">
-        <div class="col">
-            <div class="mb-3">
-                <label for="produto" class="form-label">Produto:</label>
-                <select @bind="novaAvaliacao.ProdutoId" class="form-select" id="produto">
+    <div class="card shadow-sm p-4">
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="produto" class="form-label fw-bold">Produto:</label>
+                <select @bind="novaAvaliacao.ProdutoId" class="form-select shadow-sm" id="produto">
                     <option value="">Selecione aqui</option> <!-- Opção padrão -->
                     @foreach (var produto in produtos)
                     {
@@ -21,11 +21,9 @@
                     }
                 </select>
             </div>
-        </div>
-        <div class="col">
-            <div class="mb-3">
-                <label for="nota" class="form-label">Nota:</label>
-                <select @bind="novaAvaliacao.Nota" class="form-select" id="nota">
+            <div class="col-md-6 mb-3">
+                <label for="nota" class="form-label fw-bold">Nota:</label>
+                <select @bind="novaAvaliacao.Nota" class="form-select shadow-sm" id="nota">
                     <option value="1">1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>
@@ -34,21 +32,59 @@
                 </select>
             </div>
         </div>
-    </div>
 
-    @if (enabledButton)
-    {
-        <button type="button" class="btn btn-warning" @onclick="Cancelar">CANCELAR</button>
-        <button type="button" class="btn btn-success" @onclick="Salvar">SALVAR</button>
-    }
-    else
-    {
-        <div class="alert alert-success" role="alert">
-            Avaliação cadastrada com sucesso!
+        <!-- Botões de Ação Centralizados -->
+        <div class="text-center mt-4">
+            @if (enabledButton)
+            {
+                <button type="button" class="btn btn-warning me-2 px-4 py-2 shadow-sm btn-animate" style="font-weight: bold; font-size: 1rem;" @onclick="Cancelar">
+                    <i class="bi bi-x-circle me-2"></i>Cancelar
+                </button>
+                <button type="button" class="btn btn-success ms-2 px-4 py-2 shadow-sm btn-animate" style="font-weight: bold; font-size: 1rem;" @onclick="Salvar">
+                    <i class="bi bi-check-circle me-2"></i>Salvar
+                </button>
+            }
+            else
+            {
+                <div class="alert alert-success text-center mt-3 mb-3" role="alert">
+                    Avaliação cadastrada com sucesso!
+                </div>
+                <button type="button" class="btn btn-primary px-4 py-2 shadow-sm btn-animate" style="font-weight: bold; font-size: 1rem;" @onclick="NovaAvaliacao">
+                    <i class="bi bi-plus-circle me-2"></i>Nova Avaliação
+                </button>
+            }
         </div>
-        <button type="button" class="btn btn-primary" @onclick="NovaAvaliacao">NOVA AVALIAÇÃO</button>
-    }
+    </div>
 </div>
+
+<style>
+    .form-select {
+        border-radius: 0.375rem;
+        background-color: #f8f9fa;
+        border-color: #dee2e6;
+        transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .form-select:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.25);
+    }
+
+    .btn-animate {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .btn-animate:hover {
+        transform: translateY(-5px) scale(1.05);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .alert {
+        opacity: 1;
+        transition: opacity 0.5s ease-in-out;
+    }
+</style>
+
 
 @code {
     private Avaliacao novaAvaliacao = new Avaliacao { Data = DateTime.Now };
@@ -69,7 +105,7 @@
 
     private void Cancelar()
     {
-        NavigationManager.NavigateTo("/atribuirnota");
+        NavigationManager.NavigateTo("/atribuirnota", forceLoad: true);
     }
 
     private void NovaAvaliacao()

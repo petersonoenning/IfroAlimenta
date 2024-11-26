@@ -6,39 +6,69 @@
 @inject NavigationManager NavigationManager
 @rendermode InteractiveServer
 
-<h3>Visualizar Opções de Cardápio</h3>
+<div class="container-fluid py-4">
+    <h3 class="text-center mb-4 fw-bold text-uppercase" style="font-size: 1.8rem; color: #333;">Visualizar Opções de Cardápio</h3>
 
-<div class="container">
-    <div class="mb-3">
-        <label for="dataCardapio" class="form-label">Selecione a Data:</label>
-        <input type="date" @bind="selectedDate" class="form-control" id="dataCardapio" />
-    </div>
-
-    <div class="mb-3">
-        <button type="button" class="btn btn-primary" @onclick="BuscarOpcoesCardapio">Buscar</button>
-        <button type="button" class="btn btn-secondary" @onclick="NovaBusca">Nova Busca</button>
-    </div>
-
-    @if (isSearchPerformed)
-    {
-        @if (opcoesCardapio != null && opcoesCardapio.Any())
-        {
-            <h4>Opções de Cardápio para @selectedDate.ToString("dd/MM/yyyy")</h4>
-            <ul>
-                @foreach (var opcao in opcoesCardapio)
-                {
-                    <li>@opcao.Produto?.Nome</li>
-                }
-            </ul>
-        }
-        else
-        {
-            <div class="alert alert-warning" role="alert">
-                Não há opções de cardápio para a data selecionada.
+    <div class="row justify-content-center">
+        <div class="col-md-10 col-lg-8">
+            <!-- Selecione a Data -->
+            <div class="mb-4">
+                <label for="dataCardapio" class="form-label fw-bold">Selecione a Data:</label>
+                <input type="date" @bind="selectedDate" class="form-control shadow-sm" id="dataCardapio" />
             </div>
-        }
-    }
+
+            <!-- Botões de Ação -->
+            <div class="text-center mb-4">
+                <button type="button" class="btn btn-primary me-2 px-4 py-2 shadow-sm btn-animate" style="font-weight: bold; font-size: 1rem;" @onclick="BuscarOpcoesCardapio">
+                    <i class="bi bi-search me-2"></i>Buscar
+                </button>
+                <button type="button" class="btn btn-secondary ms-2 px-4 py-2 shadow-sm btn-animate" style="font-weight: bold; font-size: 1rem;" @onclick="NovaBusca">
+                    <i class="bi bi-arrow-repeat me-2"></i>Nova Busca
+                </button>
+            </div>
+
+            <!-- Resultados da Busca -->
+            @if (isSearchPerformed)
+            {
+                @if (opcoesCardapio != null && opcoesCardapio.Any())
+                {
+                    <div class="card p-3 border-0 shadow-sm">
+                        <h4 class="mb-3">Opções de Cardápio para @selectedDate.ToString("dd/MM/yyyy")</h4>
+                        <ul class="list-unstyled">
+                            @foreach (var opcao in opcoesCardapio)
+                            {
+                                <li class="mb-2">@opcao.Produto?.Nome</li>
+                            }
+                        </ul>
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-warning text-center mb-3" role="alert">
+                        Não há opções de cardápio para a data selecionada.
+                    </div>
+                }
+            }
+        </div>
+    </div>
 </div>
+
+<style>
+    .btn-animate {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .btn-animate:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+    .list-unstyled li {
+        font-size: 1rem;
+        color: #333;
+    }
+</style>
+
 
 @code {
     private DateTime selectedDate = DateTime.Now;

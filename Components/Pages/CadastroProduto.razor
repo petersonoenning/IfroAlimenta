@@ -6,6 +6,7 @@
 @inject IWebHostEnvironment env
 @rendermode InteractiveServer
 
+<<<<<<< HEAD
 <h3 class="text-center my-4">Cadastro de Produto</h3>
 
 <div class="container my-4 p-4 border rounded shadow-sm bg-light">
@@ -32,23 +33,52 @@
             <div class="mb-3">
                 <label for="categoria" class="form-label">Categoria:</label>
                 <select @bind="novoProduto.Categoria" class="form-select" id="categoria">
+=======
+<div class="container-fluid py-4">
+    <h3 class="text-center mb-4 fw-bold text-uppercase" style="font-size: 1.8rem; color: #333;">Cadastro de Produto</h3>
+
+    <div class="card shadow-sm p-4">
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="nome" class="form-label fw-bold">Nome:</label>
+                <input @bind="novoProduto.Nome" type="text" class="form-control shadow-sm" id="nome">
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="descricao" class="form-label fw-bold">Descrição:</label>
+                <input @bind="novoProduto.Descricao" type="text" class="form-control shadow-sm" id="descricao">
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="quantidade" class="form-label fw-bold">Quantidade:</label>
+                <input @bind="novoProduto.Quantidade" type="text" class="form-control shadow-sm" id="quantidade">
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="categoria" class="form-label fw-bold">Categoria:</label>
+                <select @bind="novoProduto.Categoria" class="form-select shadow-sm" id="categoria">
+>>>>>>> 880150afa750d28fbac5d38a5e28dbec39b3a0b4
                     @foreach (var categoria in Categorias)
                     {
                         <option value="@categoria.Key">@categoria.Value</option>
                     }
                 </select>
             </div>
+<<<<<<< HEAD
         </div>
         <div class="col-md-6">
             <div class="mb-3">
                 <label for="tipo" class="form-label">Tipo:</label>
                 <select @bind="novoProduto.Tipo" class="form-select" id="tipo">
+=======
+            <div class="col-md-6 mb-3">
+                <label for="tipo" class="form-label fw-bold">Tipo:</label>
+                <select @bind="novoProduto.Tipo" class="form-select shadow-sm" id="tipo">
+>>>>>>> 880150afa750d28fbac5d38a5e28dbec39b3a0b4
                     @foreach (var tipo in Tipos)
                     {
                         <option value="@tipo.Key">@tipo.Value</option>
                     }
                 </select>
             </div>
+<<<<<<< HEAD
         </div>
         <div class="col-md-6">
             <div class="mb-3">
@@ -81,6 +111,67 @@
         </div>
     }
 </div>
+=======
+            <div class="col-md-6 mb-3">
+                <label for="valor" class="form-label fw-bold">Valor:</label>
+                <input @bind="novoProduto.Valor" type="number" step="0.01" class="form-control shadow-sm" id="valor">
+            </div>
+        </div>
+
+        <div class="text-center mt-4">
+            @if (enabledButton)
+            {
+                <button type="button" class="btn btn-warning me-2 px-4 py-2 shadow-sm btn-animate" @onclick="Cancelar">
+                    <i class="bi bi-x-circle me-2"></i>Cancelar
+                </button>
+                <button type="button" class="btn btn-success ms-2 px-4 py-2 shadow-sm btn-animate" @onclick="Salvar">
+                    <i class="bi bi-check-circle me-2"></i>Salvar
+                </button>
+            }
+            else
+            {
+                <div class="alert alert-success text-center mb-3" role="alert">
+                    Produto cadastrado com sucesso!
+                </div>
+                <button type="button" class="btn btn-primary px-4 py-2 shadow-sm btn-animate" @onclick="NovoCadastroProduto">
+                    <i class="bi bi-plus-circle me-2"></i>Novo Cadastro
+                </button>
+            }
+        </div>
+    </div>
+</div>
+
+<style>
+    .form-control, .form-select {
+        border-radius: 0.25rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        font-size: 1rem;
+    }
+
+    .card {
+        border-radius: 0.5rem;
+    }
+
+    .btn-animate {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .btn-animate:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+    .alert {
+        font-size: 1rem;
+        font-weight: bold;
+        border-radius: 0.25rem;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+</style>
+>>>>>>> 880150afa750d28fbac5d38a5e28dbec39b3a0b4
 
 @code {
     private Produto novoProduto = new Produto();
@@ -115,7 +206,7 @@
 
     private void Cancelar()
     {
-        NavigationManager.NavigateTo("/produto");
+        NavigationManager.NavigateTo("/produto", forceLoad: true);
     }
 
     private void NovoCadastroProduto()
