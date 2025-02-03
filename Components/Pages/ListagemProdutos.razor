@@ -1,8 +1,17 @@
 ﻿@page "/produtos"
 @using IfroAlimenta.Models
 @using IfroAlimenta.Controllers
+@using IfroAlimenta.Utilitarios
 @inject ProdutoController ProdutoController
 @rendermode InteractiveServer
+@inject NavigationManager nav
+@inject IJSRuntime JSRuntime
+
+<script>
+    function NovaGuia(url) {
+        window.open(url, '_blank');
+    }
+</script>
 
 <div class="container-fluid py-4">
     <h3 class="text-center mb-4 fw-bold text-uppercase" style="font-size: 1.8rem; color: #333;">Lista de Produtos</h3>
@@ -36,7 +45,11 @@
                 </tbody>
             </table>
         </div>
+        <div class="text-center mt-4">
+            <button type="button" class="btn btn-warning" @onclick="ImprimirTodos">IMPRIMIR TODOS</button>
+        </div>
     }
+    
     else
     {
         <div class="alert alert-warning text-center mt-4" role="alert">
@@ -124,4 +137,14 @@
 
         return tipo.HasValue && tipos.ContainsKey(tipo.Value) ? tipos[tipo.Value] : "Desconhecido";
     }
+
+    public async Task ImprimirTodos()
+    {
+
+
+        var impressora = new Impressora();
+        await impressora.GerarImpressao(produtos, nav, JSRuntime);
+    }
 }
+
+

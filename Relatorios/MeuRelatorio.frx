@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report ScriptLanguage="CSharp" ReportInfo.Created="11/04/2024 20:32:30" ReportInfo.Modified="11/04/2024 21:54:13" ReportInfo.CreatorVersion="2024.1.0.0">
+  <Dictionary>
+    <BusinessObjectDataSource Name="listaprodutos" ReferenceName="listaprodutos" DataType="System.Int32" Enabled="true">
+      <Column Name="Id" DataType="System.Int32"/>
+      <Column Name="Nome" DataType="System.String"/>
+      <Column Name="Descricao" DataType="System.String"/>
+      <Column Name="Quantidade" DataType="System.String"/>
+      <Column Name="Categoria" DataType="System.Int32"/>
+      <Column Name="Tipo" DataType="System.Int32"/>
+      <Column Name="Valor" DataType="System.Int32"/>
+      <Column Name="MediaNota" DataType="System.Int32"/>
+    </BusinessObjectDataSource>
+  </Dictionary>
+  <ReportPage Name="Page1" Watermark.Font="Arial, 60pt">
+    <ReportTitleBand Name="ReportTitle1" Width="718.2" Height="75.6">
+      <TextObject Name="Text1" Left="207.9" Top="28.35" Width="283.5" Height="18.9" Text="RELATÓRIO DE PRODUTOS&#13;&#10;" HorzAlign="Center" Font="Arial, 10pt, style=Bold, Italic, Underline"/>
+    </ReportTitleBand>
+    <PageHeaderBand Name="PageHeader1" Top="78.8" Width="718.2" Height="50.45">
+      <TextObject Name="Text13" Left="557.55" Top="22.1" Width="122.85" Height="28.35" Border.Lines="All" Fill.Color="LightCoral" Text="Tipo" HorzAlign="Center" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text8" Left="37.8" Top="22.1" Width="255.15" Height="28.35" Border.Lines="All" Fill.Color="LightCoral" Text="Nome" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text9" Left="141.75" Top="22.1" Width="226.8" Height="28.35" Border.Lines="All" Fill.Color="LightCoral" Text="Descrição" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text10" Left="283.5" Top="22.1" Width="170.1" Height="28.35" Border.Lines="All" Fill.Color="LightCoral" Text="Quantidade" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text11" Left="368.55" Top="22.1" Width="207.9" Height="28.35" Border.Lines="All" Fill.Color="LightCoral" Text="Valor" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text12" Left="434.7" Top="22.1" Width="170.1" Height="28.35" Border.Lines="All" Fill.Color="LightCoral" Text="Categoria" Font="Arial, 10pt, style=Bold"/>
+    </PageHeaderBand>
+    <DataBand Name="Data1" Top="132.45" Width="718.2" Height="41" Border.Lines="Top" DataSource="listaprodutos">
+      <TextObject Name="Text19" Left="557.55" Top="0.15" Width="122.85" Height="37.8" Border.Lines="All" Fill.Color="MistyRose" Text="[listaprodutos.Tipo]" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text14" Left="37.8" Top="0.15" Width="113.4" Height="37.8" Border.Lines="All" Fill.Color="MistyRose" Text="[listaprodutos.Nome]" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text15" Left="141.75" Top="0.15" Width="141.75" Height="37.8" Border.Lines="All" Fill.Color="MistyRose" Text="[listaprodutos.Descricao]" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text16" Left="283.5" Top="0.15" Width="85.05" Height="37.8" Border.Lines="All" Fill.Color="MistyRose" Text="[listaprodutos.Quantidade]" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text17" Left="368.55" Top="0.15" Width="66.15" Height="37.8" Border.Lines="All" Fill.Color="MistyRose" Text="[listaprodutos.Valor]" Format="Currency" Format.UseLocale="true" Format.DecimalDigits="2" Font="Arial, 10pt, style=Bold"/>
+      <TextObject Name="Text18" Left="434.7" Top="0.15" Width="122.85" Height="37.8" Border.Lines="All" Fill.Color="MistyRose" Text="[listaprodutos.Categoria]" Font="Arial, 10pt, style=Bold"/>
+    </DataBand>
+    <PageFooterBand Name="PageFooter1" Top="176.65" Width="718.2" Height="302.4"/>
+  </ReportPage>
+</Report>
