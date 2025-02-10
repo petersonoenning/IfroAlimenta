@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace IfroAlimenta.Models
 {
@@ -22,6 +23,10 @@ namespace IfroAlimenta.Models
 
         [NotMapped]
         public decimal? MediaNota { get; set; }
+
+        [Column("anexo")]
+        [StringLength(255)]
+        public string? Anexo { get; set; }
 
     }
 }
